@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>向日葵"阳光互助" - 宠物服务</title>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #F5F5F5;
+            color: #303030;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        
+        /* 主容器 */
+        .app-container {
+            max-width: 375px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 顶部状态栏 */
+        .status-bar {
+            height: 20px;
+            background-color: #FFCB45;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            align-items: center;
+            color: #303030;
+            font-size: 12px;
+        }
+        
+        /* 顶部导航栏 */
+        .top-nav {
+            height: 44px;
+            background: linear-gradient(135deg, #FFCB45, #FF9F5B);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: #303030;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        
+        .page-title {
+            font-size: 16px;
+            font-weight: bold;
+            flex: 1;
+            text-align: center;
+        }
+        
+        /* 宠物服务导航 */
+        .pet-services-nav {
+            display: flex;
+            background-color: #FFFFFF;
+            border-bottom: 1px solid #F0F0F0;
+            position: sticky;
+            top: 44px;
+            z-index: 9;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .pet-services-nav::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        
+        .pet-service-tab {
+            padding: 12px 15px;
+            font-size: 14px;
+            color: #666666;
+            white-space: nowrap;
+            position: relative;
+        }
+        
+        .pet-service-tab.active {
+            color: #FF9F5B;
+            font-weight: bold;
+        }
+        
+        .pet-service-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: #FF9F5B;
+            border-radius: 3px;
+        }
+        
+        /* 宠物服务卡片 */
+        .service-cards-container {
+            padding: 15px;
+        }
+        
+        .service-card {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+        
+        .service-header {
+            height: 120px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .service-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .service-tag {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255, 203, 69, 0.9);
+            color: #FFFFFF;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .service-body {
+            padding: 15px;
+        }
+        
+        .service-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #303030;
+        }
+        
+        .service-description {
+            font-size: 13px;
+            color: #666666;
+            margin-bottom: 10px;
+            line-height: 1.4;
+        }
+        
+        .service-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 12px;
+        }
+        
+        .service-provider {
+            display: flex;
+            align-items: center;
+        }
+        
+        .provider-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #F2F2F2;
+            margin-right: 8px;
+            overflow: hidden;
+        }
+        
+        .provider-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .provider-name {
+            font-size: 12px;
+            color: #666666;
+        }
+        
+        .service-price {
+            font-size: 16px;
+            font-weight: bold;
+            color: #FF9F5B;
+        }
+        
+        .service-price .unit {
+            font-size: 12px;
+            font-weight: normal;
+        }
+        
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 6px;
+            margin-top: 8px;
+        }
+        
+        .tag {
+            background-color: #FFF8E1;
+            color: #FF9F5B;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        
+        .service-footer {
+            display: flex;
+            border-top: 1px solid #F5F5F5;
+        }
+        
+        .service-action {
+            flex: 1;
+            padding: 10px 0;
+            text-align: center;
+            color: #666666;
+            font-size: 13px;
+        }
+        
+        .service-action.primary {
+            background-color: #FF9F5B;
+            color: #FFFFFF;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #FFFFFF;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #F2F2F2;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            max-width: 375px;
+            margin: 0 auto;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999999;
+        }
+        
+        .nav-item.active {
+            color: #FFCB45;
+        }
+        
+        .nav-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+        
+        .nav-text {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>12:30</span>
+            <div>
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+        
+        <!-- 顶部导航 -->
+        <div class="top-nav">
+            <div class="back-button">←</div>
+            <div class="page-title">宠物服务</div>
+        </div>
+        
+        <!-- 宠物服务导航 -->
+        <div class="pet-services-nav">
+            <div class="pet-service-tab active">遛宠物</div>
+            <div class="pet-service-tab">寻宠物</div>
+            <div class="pet-service-tab">喂宠物</div>
+            <div class="pet-service-tab">宠物托管</div>
+            <div class="pet-service-tab">宠物美容</div>
+            <div class="pet-service-tab">宠物训练</div>
+        </div>
+        
+        <!-- 宠物服务列表 -->
+        <div class="service-cards-container">
+            <!-- 遛狗服务 -->
+            <div class="service-card">
+                <div class="service-header">
+                    <img src="https://img.freepik.com/free-photo/young-man-walking-dog_23-2147857793.jpg?w=826&t=st=1695802547~exp=1695803147~hmac=26d68c7cc8e22ec523ace516ea3bfea03b29be7f54bbe3e16cf9f778b1ceb175" class="service-image" alt="遛狗服务">
+                    <div class="service-tag">高分服务</div>
+                </div>
+                <div class="service-body">
+                    <div class="service-title">专业遛狗服务</div>
+                    <div class="service-description">提供专业遛狗服务，按时间收费，小区周边遛行，遵循狗狗习惯，确保安全。</div>
+                    <div class="service-tags">
+                        <div class="tag">专业遛狗</div>
+                        <div class="tag">一对一</div>
+                        <div class="tag">定时拍照</div>
+                    </div>
+                    <div class="service-meta">
+                        <div class="service-provider">
+                            <div class="provider-avatar">
+                                <img src="https://img.freepik.com/free-photo/portrait-young-indian-man_23-2147789405.jpg?w=826&t=st=1695802686~exp=1695803286~hmac=cc3804919e149e3a76bc73a2caf6c7ca3d9fa0c10d5b2e288cc9955eb31a0d53" alt="服务提供者">
+                            </div>
+                            <div class="provider-name">王小明 | 4.9分</div>
+                        </div>
+                        <div class="service-price">¥30<span class="unit">/次</span></div>
+                    </div>
+                </div>
+                <div class="service-footer">
+                    <div class="service-action">收藏</div>
+                    <div class="service-action">联系TA</div>
+                    <div class="service-action primary">立即预约</div>
+                </div>
+            </div>
+            
+            <!-- 遛猫服务 -->
+            <div class="service-card">
+                <div class="service-header">
+                    <img src="https://img.freepik.com/free-photo/cat-garden-leash_23-2149514648.jpg?w=826&t=st=1695802800~exp=1695803400~hmac=651af9ffd4336f87e61d7bef02bf1203b7e22a89f2dab57aa6e19eeb64f2cad8" class="service-image" alt="遛猫服务">
+                </div>
+                <div class="service-body">
+                    <div class="service-title">猫咪户外活动陪伴</div>
+                    <div class="service-description">提供猫咪户外安全陪伴，专用牵引绳，安全防护，让猫咪安全体验户外乐趣。</div>
+                    <div class="service-tags">
+                        <div class="tag">猫咪专属</div>
+                        <div class="tag">安全防护</div>
+                        <div class="tag">有经验</div>
+                    </div>
+                    <div class="service-meta">
+                        <div class="service-provider">
+                            <div class="provider-avatar">
+                                <img src="https://img.freepik.com/free-photo/young-beautiful-woman-looking-camera-trendy-girl-casual-summer-white-t-shirt-jeans-shorts-positive-female-shows-facial-emotions-funny-model-isolated-yellow_158538-15805.jpg?w=826&t=st=1695802842~exp=1695803442~hmac=13a91c5c07fd0d2cd3ba1b1b4102b5dd3d63f5334ec82600ccd12dc3a5a6dc00" alt="服务提供者">
+                            </div>
+                            <div class="provider-name">李萌萌 | 4.8分</div>
+                        </div>
+                        <div class="service-price">¥40<span class="unit">/次</span></div>
+                    </div>
+                </div>
+                <div class="service-footer">
+                    <div class="service-action">收藏</div>
+                    <div class="service-action">联系TA</div>
+                    <div class="service-action primary">立即预约</div>
+                </div>
+            </div>
+            
+            <!-- 长期遛狗服务 -->
+            <div class="service-card">
+                <div class="service-header">
+                    <img src="https://img.freepik.com/free-photo/woman-holds-three-dogs-leash-walk_1157-36695.jpg?w=826&t=st=1695802863~exp=1695803463~hmac=bb6e3e9c48fcc0eb80e6d045c39e1f6a2c3122e27af1ec23c5a4a5d9bb1c15f0" class="service-image" alt="遛狗服务">
+                    <div class="service-tag">优惠套餐</div>
+                </div>
+                <div class="service-body">
+                    <div class="service-title">每日定时遛狗套餐</div>
+                    <div class="service-description">提供长期固定时间遛狗服务，每天按时接送，月付优惠，提供遛狗日志和照片记录。</div>
+                    <div class="service-tags">
+                        <div class="tag">长期优惠</div>
+                        <div class="tag">定时准点</div>
+                        <div class="tag">日志记录</div>
+                    </div>
+                    <div class="service-meta">
+                        <div class="service-provider">
+                            <div class="provider-avatar">
+                                <img src="https://img.freepik.com/free-photo/pleased-young-man-sitting-sidewalk-city-square_1262-18252.jpg?w=826&t=st=1695802913~exp=1695803513~hmac=6cd7e24e3a75e70c5a921af3d1ed7fdc254d2e3a16b7fd7b73e9b19cc0e9a2af" alt="服务提供者">
+                            </div>
+                            <div class="provider-name">赵大壮 | 5.0分</div>
+                        </div>
+                        <div class="service-price">¥600<span class="unit">/月</span></div>
+                    </div>
+                </div>
+                <div class="service-footer">
+                    <div class="service-action">收藏</div>
+                    <div class="service-action">联系TA</div>
+                    <div class="service-action primary">立即预约</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📋</div>
+                <div class="nav-text">订单</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💬</div>
+                <div class="nav-text">消息</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>向日葵"阳光互助" - 社区团购</title>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #F5F5F5;
+            color: #303030;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        
+        /* 主容器 */
+        .app-container {
+            max-width: 375px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 顶部状态栏 */
+        .status-bar {
+            height: 20px;
+            background-color: #FFCB45;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            align-items: center;
+            color: #303030;
+            font-size: 12px;
+        }
+        
+        /* 顶部导航栏 */
+        .top-nav {
+            height: 44px;
+            background: linear-gradient(135deg, #FFCB45, #FF9F5B);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: #303030;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        
+        .page-title {
+            font-size: 16px;
+            font-weight: bold;
+            flex: 1;
+            text-align: center;
+        }
+        
+        .search-icon {
+            font-size: 18px;
+        }
+        
+        /* 团购导航 */
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: #FFFFFF;
+            padding: 0 10px;
+            border-bottom: 1px solid #F2F2F2;
+            position: sticky;
+            top: 44px;
+            z-index: 9;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .category-tabs::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        
+        .category-tab {
+            padding: 12px 15px;
+            white-space: nowrap;
+            font-size: 14px;
+            color: #666666;
+            position: relative;
+        }
+        
+        .category-tab.active {
+            color: #FF9F5B;
+            font-weight: bold;
+        }
+        
+        .category-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: #FF9F5B;
+            border-radius: 3px;
+        }
+        
+        /* 快速筛选 */
+        .quick-filters {
+            display: flex;
+            padding: 12px 15px;
+            background-color: #FFFFFF;
+            gap: 10px;
+            overflow-x: auto;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .quick-filters::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        
+        .filter-tag {
+            background-color: #F5F5F5;
+            padding: 6px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #666666;
+            white-space: nowrap;
+        }
+        
+        .filter-tag.active {
+            background-color: #FFF8E1;
+            color: #FF9F5B;
+        }
+        
+        /* 限时团购 */
+        .time-limited {
+            margin: 15px;
+            background: linear-gradient(135deg, #ff8080, #ff5c5c);
+            border-radius: 10px;
+            color: white;
+            overflow: hidden;
+        }
+        
+        .time-limited-header {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .time-limited-title {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .countdown {
+            font-size: 12px;
+            background-color: rgba(255, 255, 255, 0.2);
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .time-limited-products {
+            display: flex;
+            overflow-x: auto;
+            padding: 0 15px 15px;
+            gap: 12px;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .time-limited-products::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        
+        .limited-product {
+            flex: 0 0 120px;
+            background-color: white;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .limited-product-img {
+            height: 90px;
+            background-color: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .limited-product-img img {
+            max-width: 80%;
+            max-height: 80%;
+        }
+        
+        .limited-product-info {
+            padding: 8px;
+        }
+        
+        .limited-product-name {
+            font-size: 12px;
+            color: #303030;
+            margin-bottom: 5px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .limited-product-price {
+            color: #FF5C5C;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        
+        .limited-product-original {
+            font-size: 10px;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+        
+        /* 团购列表 */
+        .group-buy-list {
+            padding: 0 15px;
+        }
+        
+        .group-item {
+            background-color: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .group-header {
+            display: flex;
+        }
+        
+        .group-image {
+            width: 120px;
+            height: 120px;
+            background-color: #F5F5F5;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .group-image img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: cover;
+        }
+        
+        .group-content {
+            flex: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .group-title {
+            font-size: 15px;
+            font-weight: bold;
+            color: #303030;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .group-description {
+            font-size: 12px;
+            color: #666666;
+            margin: 5px 0;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .group-price-info {
+            display: flex;
+            align-items: baseline;
+            margin-top: 8px;
+        }
+        
+        .group-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #FF9F5B;
+        }
+        
+        .group-original-price {
+            font-size: 12px;
+            color: #999;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+        
+        .group-progress {
+            font-size: 12px;
+            color: #FF9F5B;
+        }
+        
+        .group-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            border-top: 1px solid #F5F5F5;
+        }
+        
+        .group-merchant {
+            display: flex;
+            align-items: center;
+        }
+        
+        .merchant-avatar {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background-color: #F2F2F2;
+            margin-right: 8px;
+            overflow: hidden;
+        }
+        
+        .merchant-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .merchant-name {
+            font-size: 12px;
+            color: #666666;
+        }
+        
+        .group-button {
+            background-color: #FF9F5B;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 15px;
+            font-size: 13px;
+            font-weight: bold;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #FFFFFF;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #F2F2F2;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            max-width: 375px;
+            margin: 0 auto;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999999;
+        }
+        
+        .nav-item.active {
+            color: #FFCB45;
+        }
+        
+        .nav-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+        
+        .nav-text {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>12:30</span>
+            <div>
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+        
+        <!-- 顶部导航 -->
+        <div class="top-nav">
+            <div class="back-button">←</div>
+            <div class="page-title">社区团购</div>
+            <div class="search-icon">🔍</div>
+        </div>
+        
+        <!-- 分类导航 -->
+        <div class="category-tabs">
+            <div class="category-tab active">推荐</div>
+            <div class="category-tab">蔬果生鲜</div>
+            <div class="category-tab">肉禽蛋奶</div>
+            <div class="category-tab">粮油调味</div>
+            <div class="category-tab">零食饮料</div>
+            <div class="category-tab">日用百货</div>
+        </div>
+        
+        <!-- 快速筛选 -->
+        <div class="quick-filters">
+            <div class="filter-tag active">全部</div>
+            <div class="filter-tag">满减优惠</div>
+            <div class="filter-tag">限时折扣</div>
+            <div class="filter-tag">品质优选</div>
+            <div class="filter-tag">今日上新</div>
+            <div class="filter-tag">包邮</div>
+        </div>
+        
+        <!-- 限时团购 -->
+        <div class="time-limited">
+            <div class="time-limited-header">
+                <div class="time-limited-title">⏰ 限时特惠</div>
+                <div class="countdown">23:45:12 后结束</div>
+            </div>
+            <div class="time-limited-products">
+                <div class="limited-product">
+                    <div class="limited-product-img">
+                        <img src="https://img.freepik.com/free-photo/fresh-organic-seasonal-fruits-red-apple_53876-139103.jpg?w=740&t=st=1695805102~exp=1695805702~hmac=98e50f8aa67a6c458782a3a7d5f3de9e8f87f1de8b5afbf4c0fca2a13d99f0b7" alt="苹果">
+                    </div>
+                    <div class="limited-product-info">
+                        <div class="limited-product-name">新鲜红富士苹果</div>
+                        <div class="limited-product-price">¥12.9 <span class="limited-product-original">¥19.9</span></div>
+                    </div>
+                </div>
+                <div class="limited-product">
+                    <div class="limited-product-img">
+                        <img src="https://img.freepik.com/free-photo/grains-cereals-assortment-sack_23-2148937145.jpg?w=826&t=st=1695805142~exp=1695805742~hmac=1a8d2d88dcfaaa94b79ed37b0c4ccbd9037a6d2c0d3d9c7e2f6c3e31df28c3eb" alt="大米">
+                    </div>
+                    <div class="limited-product-info">
+                        <div class="limited-product-name">东北优质大米5kg</div>
+                        <div class="limited-product-price">¥39.9 <span class="limited-product-original">¥59.9</span></div>
+                    </div>
+                </div>
+                <div class="limited-product">
+                    <div class="limited-product-img">
+                        <img src="https://img.freepik.com/free-photo/vegetables-basket-kitchen-counter_23-2148573650.jpg?w=826&t=st=1695805180~exp=1695805780~hmac=79a2ec4591d67c0fc34a8b4195dff2fc1166d3b2f8f1b4fc14f6b7fa02d88954" alt="蔬菜">
+                    </div>
+                    <div class="limited-product-info">
+                        <div class="limited-product-name">时令蔬菜套餐</div>
+                        <div class="limited-product-price">¥29.9 <span class="limited-product-original">¥45.8</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 团购列表 -->
+        <div class="group-buy-list">
+            <!-- 团购商品1 -->
+            <div class="group-item">
+                <div class="group-header">
+                    <div class="group-image">
+                        <img src="https://img.freepik.com/free-photo/close-up-organic-yogurt-with-fruits_23-2148508921.jpg?w=826&t=st=1695805345~exp=1695805945~hmac=2a3f1e38c0e902f9b08fe0b8b0b22d3d01ffb8b2a2989db4fcba04bc1b1b0f42" alt="酸奶">
+                    </div>
+                    <div class="group-content">
+                        <div>
+                            <div class="group-title">纯正原味酸奶 6瓶装</div>
+                            <div class="group-description">天然发酵，无添加，低温冷藏，营养美味，健康饮品</div>
+                        </div>
+                        <div>
+                            <div class="group-price-info">
+                                <div class="group-price">¥36.8</div>
+                                <div class="group-original-price">¥52.0</div>
+                            </div>
+                            <div class="group-progress">已团 98/100 人</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-footer">
+                    <div class="group-merchant">
+                        <div class="merchant-avatar">
+                            <img src="https://img.freepik.com/free-photo/front-view-smiley-woman-working-shop_23-2148671308.jpg?w=826&t=st=1695805404~exp=1695806004~hmac=6eb429c7ac3a5a64bfdca6ce3a9e1f8ca0d7951b9e3d9d9bde30015b9a69ce02" alt="商家头像">
+                        </div>
+                        <div class="merchant-name">鲜乳坊 · 小区配送</div>
+                    </div>
+                    <div class="group-button">去拼团</div>
+                </div>
+            </div>
+            
+            <!-- 团购商品2 -->
+            <div class="group-item">
+                <div class="group-header">
+                    <div class="group-image">
+                        <img src="https://img.freepik.com/free-photo/still-life-rice-sack_23-2149829559.jpg?w=826&t=st=1695805443~exp=1695806043~hmac=9bfbefaf0ded81219be6ecadb11cd467d538b1a8de9fbb7f4a90a0c7edee7d41" alt="大米">
+                    </div>
+                    <div class="group-content">
+                        <div>
+                            <div class="group-title">五常稻花香大米 10kg</div>
+                            <div class="group-description">五常原产地，稻花香，颗粒饱满，煮饭香糯可口</div>
+                        </div>
+                        <div>
+                            <div class="group-price-info">
+                                <div class="group-price">¥89.9</div>
+                                <div class="group-original-price">¥138.0</div>
+                            </div>
+                            <div class="group-progress">已团 56/100 人</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-footer">
+                    <div class="group-merchant">
+                        <div class="merchant-avatar">
+                            <img src="https://img.freepik.com/free-photo/businessman-wearing-formal-suit-being-digital-era_23-2149800221.jpg?w=826&t=st=1695805465~exp=1695806065~hmac=6f2a77e2d4bf2c29cf5bd9b3be1c10f3cce22a9d59ebf70e33a28e1eb3a3ee28" alt="商家头像">
+                        </div>
+                        <div class="merchant-name">悦丰粮油 · 社区专供</div>
+                    </div>
+                    <div class="group-button">去拼团</div>
+                </div>
+            </div>
+            
+            <!-- 团购商品3 -->
+            <div class="group-item">
+                <div class="group-header">
+                    <div class="group-image">
+                        <img src="https://img.freepik.com/free-photo/top-view-vegetables-fruits-bag_23-2148949710.jpg?w=826&t=st=1695805482~exp=1695806082~hmac=93f52b13ea0de08c53e6c464ce2ad28c7e8ff4d34c8c31cdb489620cf7bc36f2" alt="蔬菜">
+                    </div>
+                    <div class="group-content">
+                        <div>
+                            <div class="group-title">每日新鲜蔬果套餐</div>
+                            <div class="group-description">当日采摘，农场直供，健康有机，品种丰富</div>
+                        </div>
+                        <div>
+                            <div class="group-price-info">
+                                <div class="group-price">¥59.8</div>
+                                <div class="group-original-price">¥88.0</div>
+                            </div>
+                            <div class="group-progress">已团 78/100 人</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="group-footer">
+                    <div class="group-merchant">
+                        <div class="merchant-avatar">
+                            <img src="https://img.freepik.com/free-photo/portrait-worker-with-orange-jacket_23-2149023166.jpg?w=826&t=st=1695805511~exp=1695806111~hmac=89f9033ff9abbb7e93d59bd8c1bd91ba1da6ec0ed3975fb47eb4e22a2ff54b44" alt="商家头像">
+                        </div>
+                        <div class="merchant-name">绿源果蔬 · 社区直供</div>
+                    </div>
+                    <div class="group-button">去拼团</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">🛒</div>
+                <div class="nav-text">团购</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📦</div>
+                <div class="nav-text">订单</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>向日葵"阳光互助" - 专业团队</title>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #F5F5F5;
+            color: #303030;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        
+        /* 主容器 */
+        .app-container {
+            max-width: 375px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 顶部状态栏 */
+        .status-bar {
+            height: 20px;
+            background-color: #FFCB45;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            align-items: center;
+            color: #303030;
+            font-size: 12px;
+        }
+        
+        /* 顶部导航栏 */
+        .top-nav {
+            height: 44px;
+            background: linear-gradient(135deg, #FFCB45, #FF9F5B);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: #303030;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        
+        .page-title {
+            font-size: 16px;
+            font-weight: bold;
+            flex: 1;
+            text-align: center;
+        }
+        
+        /* 搜索栏 */
+        .search-bar {
+            display: flex;
+            padding: 10px 15px;
+            background-color: #FFFFFF;
+        }
+        
+        .search-input {
+            flex: 1;
+            height: 36px;
+            background-color: #F5F5F5;
+            border-radius: 18px;
+            border: none;
+            padding: 0 15px;
+            font-size: 14px;
+            color: #303030;
+        }
+        
+        /* 专业分类 */
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: #FFFFFF;
+            padding: 0 10px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .category-tabs::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        
+        .category-tab {
+            padding: 12px 15px;
+            white-space: nowrap;
+            font-size: 14px;
+            color: #666666;
+            position: relative;
+        }
+        
+        .category-tab.active {
+            color: #FF9F5B;
+            font-weight: bold;
+        }
+        
+        .category-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: #FF9F5B;
+            border-radius: 3px;
+        }
+        
+        /* 团队卡片 */
+        .team-container {
+            padding: 10px 15px;
+        }
+        
+        .team-card {
+            background: #FFFFFF;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .team-header {
+            position: relative;
+            height: 120px;
+        }
+        
+        .team-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .team-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255, 203, 69, 0.9);
+            color: #FFFFFF;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .team-info {
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        
+        .team-title {
+            font-size: 16px;
+            font-weight: bold;
+            color: #303030;
+        }
+        
+        .team-subtitle {
+            font-size: 13px;
+            color: #666666;
+        }
+        
+        .team-stats {
+            display: flex;
+            gap: 15px;
+            margin-top: 5px;
+        }
+        
+        .stat-item {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #999999;
+        }
+        
+        .stat-icon {
+            margin-right: 5px;
+            color: #FF9F5B;
+        }
+        
+        .team-services {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 5px;
+        }
+        
+        .service-tag {
+            background-color: #FFF8E1;
+            color: #FF9F5B;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        
+        .team-footer {
+            display: flex;
+            border-top: 1px solid #F5F5F5;
+        }
+        
+        .team-action {
+            flex: 1;
+            padding: 12px 0;
+            text-align: center;
+            color: #666666;
+        }
+        
+        .team-action.primary {
+            background-color: #FF9F5B;
+            color: #FFFFFF;
+        }
+        
+        /* 评价信息 */
+        .rating-info {
+            display: flex;
+            align-items: center;
+            margin-top: 5px;
+        }
+        
+        .rating-stars {
+            color: #FFCB45;
+            margin-right: 5px;
+        }
+        
+        .rating-score {
+            font-weight: bold;
+            color: #FF9F5B;
+            margin-right: 5px;
+        }
+        
+        .rating-count {
+            font-size: 12px;
+            color: #999999;
+        }
+        
+        /* 技能标签 */
+        .team-skills {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin-top: 8px;
+        }
+        
+        .skill-tag {
+            background-color: #f0f0f0;
+            color: #666666;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #FFFFFF;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #F2F2F2;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            max-width: 375px;
+            margin: 0 auto;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999999;
+        }
+        
+        .nav-item.active {
+            color: #FFCB45;
+        }
+        
+        .nav-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+        
+        .nav-text {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>12:30</span>
+            <div>
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+        
+        <!-- 顶部导航 -->
+        <div class="top-nav">
+            <div class="back-button">←</div>
+            <div class="page-title">专业团队</div>
+        </div>
+        
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+            <input type="text" placeholder="搜索服务类型、团队名称" class="search-input">
+        </div>
+        
+        <!-- 分类导航 -->
+        <div class="category-tabs">
+            <div class="category-tab active">全部</div>
+            <div class="category-tab">上门煮饭</div>
+            <div class="category-tab">上门安装</div>
+            <div class="category-tab">家电维修</div>
+            <div class="category-tab">家庭陪护</div>
+            <div class="category-tab">家政服务</div>
+        </div>
+        
+        <!-- 专业团队列表 -->
+        <div class="team-container">
+            <!-- 团队1 -->
+            <div class="team-card">
+                <div class="team-header">
+                    <img src="https://img.freepik.com/free-photo/repairman-doing-air-conditioner-service_1303-26541.jpg?w=826&t=st=1695803822~exp=1695804422~hmac=8eee6186e50210210f387e6703e5239dfe25e30a0c18c7674e327471c2be0d48" alt="家电维修团队" class="team-image">
+                    <div class="team-badge">专业认证</div>
+                </div>
+                <div class="team-info">
+                    <div class="team-title">安心家电维修</div>
+                    <div class="team-subtitle">专业提供各类家电维修服务，拥有10年维修经验，保修期长。</div>
+                    
+                    <div class="rating-info">
+                        <div class="rating-stars">★★★★★</div>
+                        <div class="rating-score">4.9</div>
+                        <div class="rating-count">(253条评价)</div>
+                    </div>
+                    
+                    <div class="team-services">
+                        <div class="service-tag">空调维修</div>
+                        <div class="service-tag">冰箱维修</div>
+                        <div class="service-tag">洗衣机维修</div>
+                        <div class="service-tag">热水器维修</div>
+                    </div>
+                    
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <span class="stat-icon">🛠️</span>
+                            <span>已服务 1200+</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">⏱️</span>
+                            <span>30分钟响应</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">🏆</span>
+                            <span>金牌团队</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-footer">
+                    <div class="team-action">收藏</div>
+                    <div class="team-action">咨询</div>
+                    <div class="team-action primary">预约服务</div>
+                </div>
+            </div>
+            
+            <!-- 团队2 -->
+            <div class="team-card">
+                <div class="team-header">
+                    <img src="https://img.freepik.com/free-photo/chef-cooking-restaurant-kitchen_53876-73341.jpg?w=826&t=st=1695803890~exp=1695804490~hmac=babe7580c77beb3b8c77a06969e5d31c1ca451d4bf5de86b90ea726d8d046b69" alt="上门煮饭团队" class="team-image">
+                    <div class="team-badge">本月热门</div>
+                </div>
+                <div class="team-info">
+                    <div class="team-title">味道生活 · 上门烹饪</div>
+                    <div class="team-subtitle">专业厨师上门服务，提供定制菜单，满足各类家庭聚餐、宴请需求。</div>
+                    
+                    <div class="rating-info">
+                        <div class="rating-stars">★★★★★</div>
+                        <div class="rating-score">4.8</div>
+                        <div class="rating-count">(186条评价)</div>
+                    </div>
+                    
+                    <div class="team-services">
+                        <div class="service-tag">家庭聚餐</div>
+                        <div class="service-tag">商务宴请</div>
+                        <div class="service-tag">长期配餐</div>
+                        <div class="service-tag">节日特供</div>
+                    </div>
+                    
+                    <div class="team-skills">
+                        <div class="skill-tag">粤菜</div>
+                        <div class="skill-tag">川菜</div>
+                        <div class="skill-tag">鲁菜</div>
+                        <div class="skill-tag">创意料理</div>
+                    </div>
+                    
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <span class="stat-icon">🍳</span>
+                            <span>已服务 800+</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">🥇</span>
+                            <span>厨师大赛冠军</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-footer">
+                    <div class="team-action">收藏</div>
+                    <div class="team-action">咨询</div>
+                    <div class="team-action primary">预约服务</div>
+                </div>
+            </div>
+            
+            <!-- 团队3 -->
+            <div class="team-card">
+                <div class="team-header">
+                    <img src="https://img.freepik.com/free-photo/charlady-professional-uniform-work-with-cleaning-equipment-mops-house_169016-15522.jpg?w=826&t=st=1695803931~exp=1695804531~hmac=b60ea95e7f5b1d06b42e4f631cb92e2f87f93a6e21b9b72fb4ae7d809cf4cbbd" alt="家政服务团队" class="team-image">
+                </div>
+                <div class="team-info">
+                    <div class="team-title">洁净家园 · 专业保洁</div>
+                    <div class="team-subtitle">提供专业家庭保洁、开荒保洁、衣物洗护等服务，使用环保清洁产品。</div>
+                    
+                    <div class="rating-info">
+                        <div class="rating-stars">★★★★★</div>
+                        <div class="rating-score">4.7</div>
+                        <div class="rating-count">(320条评价)</div>
+                    </div>
+                    
+                    <div class="team-services">
+                        <div class="service-tag">家庭保洁</div>
+                        <div class="service-tag">开荒保洁</div>
+                        <div class="service-tag">深度清洁</div>
+                        <div class="service-tag">玻璃清洁</div>
+                    </div>
+                    
+                    <div class="team-stats">
+                        <div class="stat-item">
+                            <span class="stat-icon">🧹</span>
+                            <span>已服务 1500+</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">🌱</span>
+                            <span>环保清洁</span>
+                        </div>
+                        <div class="stat-item">
+                            <span class="stat-icon">🔄</span>
+                            <span>定期服务优惠</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="team-footer">
+                    <div class="team-action">收藏</div>
+                    <div class="team-action">咨询</div>
+                    <div class="team-action primary">预约服务</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📋</div>
+                <div class="nav-text">订单</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💬</div>
+                <div class="nav-text">消息</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

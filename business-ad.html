@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>向日葵"阳光互助" - 商家广告</title>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #F5F5F5;
+            color: #303030;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        
+        /* 主容器 */
+        .app-container {
+            max-width: 375px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 顶部状态栏 */
+        .status-bar {
+            height: 20px;
+            background-color: #FFCB45;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            align-items: center;
+            color: #303030;
+            font-size: 12px;
+        }
+        
+        /* 顶部导航栏 */
+        .top-nav {
+            height: 44px;
+            background: linear-gradient(135deg, #FFCB45, #FF9F5B);
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            color: #303030;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            font-size: 18px;
+            margin-right: 10px;
+        }
+        
+        .page-title {
+            font-size: 16px;
+            font-weight: bold;
+            flex: 1;
+            text-align: center;
+        }
+        
+        /* 搜索栏 */
+        .search-bar {
+            display: flex;
+            padding: 10px 15px;
+            background-color: #FFFFFF;
+        }
+        
+        .search-input {
+            flex: 1;
+            height: 36px;
+            background-color: #F5F5F5;
+            border-radius: 18px;
+            border: none;
+            padding: 0 15px;
+            font-size: 14px;
+            color: #303030;
+        }
+        
+        /* 分类导航 */
+        .category-tabs {
+            display: flex;
+            overflow-x: auto;
+            background-color: #FFFFFF;
+            padding: 0 10px;
+            border-bottom: 1px solid #F2F2F2;
+            position: sticky;
+            top: 44px;
+            z-index: 9;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .category-tabs::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        
+        .category-tab {
+            padding: 12px 15px;
+            white-space: nowrap;
+            font-size: 14px;
+            color: #666666;
+            position: relative;
+        }
+        
+        .category-tab.active {
+            color: #FF9F5B;
+            font-weight: bold;
+        }
+        
+        .category-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 3px;
+            background-color: #FF9F5B;
+            border-radius: 3px;
+        }
+        
+        /* 首页推荐商家 */
+        .featured-merchants {
+            padding: 15px;
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 12px;
+            color: #303030;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .view-more {
+            font-size: 12px;
+            color: #8ED1B2;
+            font-weight: normal;
+        }
+        
+        .merchants-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+        
+        .merchant-card {
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .merchant-cover {
+            height: 100px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .merchant-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .merchant-badge {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            background-color: rgba(255, 159, 91, 0.9);
+            color: #FFFFFF;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+        
+        .merchant-info {
+            padding: 10px;
+        }
+        
+        .merchant-name {
+            font-weight: bold;
+            font-size: 14px;
+            color: #303030;
+            margin-bottom: 4px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        .merchant-type {
+            font-size: 12px;
+            color: #666666;
+            margin-bottom: 4px;
+        }
+        
+        .merchant-rating {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #FFCB45;
+        }
+        
+        .rating-score {
+            margin-left: 2px;
+            font-weight: bold;
+        }
+        
+        .merchant-distance {
+            font-size: 12px;
+            color: #999999;
+            margin-left: 5px;
+        }
+        
+        /* 广告横幅 */
+        .ad-banner {
+            margin: 0 15px 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            height: 80px;
+            background: linear-gradient(135deg, #8ED1B2, #7BB9E8);
+            position: relative;
+        }
+        
+        .ad-banner img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .ad-tag {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background-color: rgba(0, 0, 0, 0.3);
+            color: white;
+            border-radius: 2px;
+            padding: 1px 4px;
+            font-size: 10px;
+        }
+        
+        /* 商家列表 */
+        .merchants-list {
+            padding: 0 15px;
+        }
+        
+        .list-merchant {
+            margin-bottom: 15px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .list-merchant-header {
+            height: 120px;
+            position: relative;
+        }
+        
+        .merchant-cover-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .list-merchant-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: rgba(255, 203, 69, 0.9);
+            color: #FFFFFF;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+        }
+        
+        .list-merchant-info {
+            padding: 12px;
+            border-bottom: 1px solid #F5F5F5;
+        }
+        
+        .list-merchant-name {
+            font-size: 16px;
+            font-weight: bold;
+            color: #303030;
+            margin-bottom: 6px;
+        }
+        
+        .list-merchant-desc {
+            font-size: 12px;
+            color: #666666;
+            margin-bottom: 6px;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        
+        .merchant-tags {
+            display: flex;
+            gap: 5px;
+            flex-wrap: wrap;
+            margin-top: 8px;
+        }
+        
+        .merchant-tag {
+            background-color: #F5F5F5;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-size: 10px;
+            color: #666666;
+        }
+        
+        .list-merchant-footer {
+            padding: 10px 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .merchant-distance-info {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: #666666;
+        }
+        
+        .distance-icon {
+            margin-right: 3px;
+            color: #8ED1B2;
+        }
+        
+        .merchant-action {
+            background-color: #FF9F5B;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #FFFFFF;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #F2F2F2;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            max-width: 375px;
+            margin: 0 auto;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999999;
+        }
+        
+        .nav-item.active {
+            color: #FFCB45;
+        }
+        
+        .nav-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+        
+        .nav-text {
+            font-size: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>12:30</span>
+            <div>
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+        
+        <!-- 顶部导航 -->
+        <div class="top-nav">
+            <div class="back-button">←</div>
+            <div class="page-title">商家广告</div>
+        </div>
+        
+        <!-- 搜索栏 -->
+        <div class="search-bar">
+            <input type="text" placeholder="搜索商家、服务" class="search-input">
+        </div>
+        
+        <!-- 分类导航 -->
+        <div class="category-tabs">
+            <div class="category-tab active">全部</div>
+            <div class="category-tab">美食</div>
+            <div class="category-tab">超市便利</div>
+            <div class="category-tab">日用百货</div>
+            <div class="category-tab">教育培训</div>
+            <div class="category-tab">医疗健康</div>
+        </div>
+        
+        <!-- 首页推荐商家 -->
+        <div class="featured-merchants">
+            <div class="section-title">
+                <span>热门商家</span>
+                <span class="view-more">查看更多 ></span>
+            </div>
+            <div class="merchants-grid">
+                <div class="merchant-card">
+                    <div class="merchant-cover">
+                        <img src="https://img.freepik.com/free-photo/interior-shot-cafe-with-chairs-near-bar-counter-with-several-wooden-tables_181624-1669.jpg?w=826&t=st=1695805974~exp=1695806574~hmac=6d2233265bc6cfdeef5b2fdcf21dd8a10804ddc006cde4afcf693fe43c52c119" alt="咖啡店" class="merchant-image">
+                        <div class="merchant-badge">HOT</div>
+                    </div>
+                    <div class="merchant-info">
+                        <div class="merchant-name">悠闲咖啡馆</div>
+                        <div class="merchant-type">咖啡甜点</div>
+                        <div class="merchant-rating">
+                            ★★★★★ <span class="rating-score">4.9</span>
+                            <span class="merchant-distance">300m</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="merchant-card">
+                    <div class="merchant-cover">
+                        <img src="https://img.freepik.com/free-photo/barber-cutting-client-s-hair-barber-shop_1303-20970.jpg?w=826&t=st=1695805919~exp=1695806519~hmac=bfb3a9d1bbe0a69fc6b5a10c53a9c5025bd12235ce3ade53e9ce19a6070a5d2f" alt="理发店" class="merchant-image">
+                        <div class="merchant-badge">满减</div>
+                    </div>
+                    <div class="merchant-info">
+                        <div class="merchant-name">型男理发店</div>
+                        <div class="merchant-type">美发美容</div>
+                        <div class="merchant-rating">
+                            ★★★★☆ <span class="rating-score">4.7</span>
+                            <span class="merchant-distance">450m</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="merchant-card">
+                    <div class="merchant-cover">
+                        <img src="https://img.freepik.com/free-photo/vegetables-fruits-market-shop_23-2148268246.jpg?w=826&t=st=1695806012~exp=1695806612~hmac=75cedf5e94c89f25a0cd60de63c2b0b3f6a56bb9da81fdfc95e53c38b8da62ac" alt="水果店" class="merchant-image">
+                        <div class="merchant-badge">配送快</div>
+                    </div>
+                    <div class="merchant-info">
+                        <div class="merchant-name">鲜果优选</div>
+                        <div class="merchant-type">水果生鲜</div>
+                        <div class="merchant-rating">
+                            ★★★★★ <span class="rating-score">4.8</span>
+                            <span class="merchant-distance">200m</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="merchant-card">
+                    <div class="merchant-cover">
+                        <img src="https://img.freepik.com/free-photo/row-books-shelf_23-2147845946.jpg?w=826&t=st=1695806052~exp=1695806652~hmac=3b252e0ef2beaf789dd1e8ae7fe4a8ac0c5e0cba16bd6e1cd6fcf23d844dc13a" alt="书店" class="merchant-image">
+                        <div class="merchant-badge">折扣</div>
+                    </div>
+                    <div class="merchant-info">
+                        <div class="merchant-name">知阅书屋</div>
+                        <div class="merchant-type">图书文具</div>
+                        <div class="merchant-rating">
+                            ★★★★☆ <span class="rating-score">4.6</span>
+                            <span class="merchant-distance">500m</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 广告横幅 -->
+        <div class="ad-banner">
+            <img src="https://img.freepik.com/free-photo/flat-lay-batches-vegetable-wooden-table_23-2148684056.jpg?w=826&t=st=1695806149~exp=1695806749~hmac=6d0ac87e8b72fa5eab0aaa97b0cc95e5d93e48c33a2c8df49db6eefae27d8a5d" alt="广告">
+            <div class="ad-tag">广告</div>
+        </div>
+        
+        <!-- 商家列表 -->
+        <div class="merchants-list">
+            <div class="section-title">
+                <span>附近商家</span>
+                <span class="view-more">筛选</span>
+            </div>
+            
+            <!-- 商家1 -->
+            <div class="list-merchant">
+                <div class="list-merchant-header">
+                    <img src="https://img.freepik.com/free-photo/cafe-interior-with-wooden-furniture_23-2149424282.jpg?w=826&t=st=1695806197~exp=1695806797~hmac=11a2c5ec9ce2f81cef84bdaca0a47baa1be9b3e48ee10bf0a8c6be8a8f9fa0f5" alt="咖啡厅" class="merchant-cover-img">
+                    <div class="list-merchant-badge">小区专享</div>
+                </div>
+                <div class="list-merchant-info">
+                    <div class="list-merchant-name">春日花园咖啡</div>
+                    <div class="list-merchant-desc">提供精品咖啡、手工甜点、下午茶套餐，环境优雅，适合工作和小型聚会。</div>
+                    <div class="merchant-tags">
+                        <div class="merchant-tag">咖啡</div>
+                        <div class="merchant-tag">甜点</div>
+                        <div class="merchant-tag">下午茶</div>
+                        <div class="merchant-tag">安静环境</div>
+                    </div>
+                </div>
+                <div class="list-merchant-footer">
+                    <div class="merchant-distance-info">
+                        <span class="distance-icon">📍</span>
+                        <span>距离 200m</span>
+                    </div>
+                    <div class="merchant-action">立即前往</div>
+                </div>
+            </div>
+            
+            <!-- 商家2 -->
+            <div class="list-merchant">
+                <div class="list-merchant-header">
+                    <img src="https://img.freepik.com/free-photo/interior-design-japanese-sushi-restaurant_23-2148935378.jpg?w=826&t=st=1695806264~exp=1695806864~hmac=3ad271dd7cc36dc46c7fd04ae3d650c1b9c9a49c9b75b9b5acb19de333a24246" alt="日料店" class="merchant-cover-img">
+                    <div class="list-merchant-badge">优惠券</div>
+                </div>
+                <div class="list-merchant-info">
+                    <div class="list-merchant-name">樱花日料</div>
+                    <div class="list-merchant-desc">专业日本料理，包含寿司、刺身、烤物等多种传统日式美食，新鲜食材，专业厨师。</div>
+                    <div class="merchant-tags">
+                        <div class="merchant-tag">日料</div>
+                        <div class="merchant-tag">寿司</div>
+                        <div class="merchant-tag">日式火锅</div>
+                        <div class="merchant-tag">居酒屋</div>
+                    </div>
+                </div>
+                <div class="list-merchant-footer">
+                    <div class="merchant-distance-info">
+                        <span class="distance-icon">📍</span>
+                        <span>距离 350m</span>
+                    </div>
+                    <div class="merchant-action">立即前往</div>
+                </div>
+            </div>
+            
+            <!-- 商家3 -->
+            <div class="list-merchant">
+                <div class="list-merchant-header">
+                    <img src="https://img.freepik.com/free-photo/women-s-clothing-store-with-colourful-items-display_23-2149056729.jpg?w=826&t=st=1695806302~exp=1695806902~hmac=5c7c3088a6cf81bfa3c8ac9e82de0aaf6a98c5da7d9c62feb9c1b24fc7bf3dd6" alt="服装店" class="merchant-cover-img">
+                </div>
+                <div class="list-merchant-info">
+                    <div class="list-merchant-name">米兰时尚服饰</div>
+                    <div class="list-merchant-desc">引进欧美时尚潮流服饰，提供时尚搭配建议，定期更新款式，满足不同场合需求。</div>
+                    <div class="merchant-tags">
+                        <div class="merchant-tag">女装</div>
+                        <div class="merchant-tag">男装</div>
+                        <div class="merchant-tag">配饰</div>
+                        <div class="merchant-tag">鞋包</div>
+                    </div>
+                </div>
+                <div class="list-merchant-footer">
+                    <div class="merchant-distance-info">
+                        <span class="distance-icon">📍</span>
+                        <span>距离 450m</span>
+                    </div>
+                    <div class="merchant-action">立即前往</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🛒</div>
+                <div class="nav-text">团购</div>
+            </div>
+            <div class="nav-item active">
+                <div class="nav-icon">🏬</div>
+                <div class="nav-text">商家</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

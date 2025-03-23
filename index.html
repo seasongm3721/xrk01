@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>向日葵"阳光互助"社区服务小程序设计展示</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #FFCB45, #FF9F5B);
+            border-radius: 10px;
+            color: white;
+            box-shadow: 0 4px 12px rgba(255, 175, 75, 0.2);
+        }
+        
+        h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+        
+        .screens-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 50px;
+        }
+        
+        .screen-item {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .screen-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(255, 175, 75, 0.25);
+        }
+        
+        .screen-title {
+            padding: 15px 20px;
+            background-color: #FFCB45;
+            color: #333;
+            font-weight: bold;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .screen-preview {
+            height: 580px;
+            overflow: hidden;
+            position: relative;
+            background-color: #f5f5f5;
+        }
+        
+        .screen-preview iframe {
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        
+        .placeholder {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #aaa;
+            font-size: 14px;
+        }
+        
+        .section-title {
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #FFCB45;
+            color: #333;
+            font-size: 24px;
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 50px;
+            padding: 20px;
+            color: #666;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>向日葵"阳光互助"社区服务小程序</h1>
+            <div class="subtitle">UI/UX 设计展示</div>
+        </header>
+        
+        <!-- 首页设计 -->
+        <h2 class="section-title">首页设计</h2>
+        <div class="screens-grid" id="homepage-screens">
+            <div class="screen-item">
+                <div class="screen-title">首页界面</div>
+                <div class="screen-preview">
+                    <iframe src="homepage.html"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 社区互助模块 -->
+        <h2 class="section-title">社区互助模块</h2>
+        <div class="screens-grid" id="community-help-screens">
+            <div class="screen-item">
+                <div class="screen-title">宠物服务模块</div>
+                <div class="screen-preview">
+                    <iframe src="pet-service.html"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 专业团队模块 -->
+        <h2 class="section-title">专业团队模块</h2>
+        <div class="screens-grid" id="professional-team-screens">
+            <div class="screen-item">
+                <div class="screen-title">专业团队</div>
+                <div class="screen-preview">
+                    <iframe src="professional-team.html"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 团购模块 -->
+        <h2 class="section-title">团购模块</h2>
+        <div class="screens-grid" id="group-buying-screens">
+            <div class="screen-item">
+                <div class="screen-title">团购主页</div>
+                <div class="screen-preview">
+                    <iframe src="group-buying.html"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 商家广告模块 -->
+        <h2 class="section-title">商家广告模块</h2>
+        <div class="screens-grid" id="business-ad-screens">
+            <div class="screen-item">
+                <div class="screen-title">商家广告</div>
+                <div class="screen-preview">
+                    <iframe src="business-ad.html"></iframe>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            向日葵"阳光互助"社区服务小程序 - 设计展示 © 2023
+        </footer>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,584 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>向日葵"阳光互助" - 首页</title>
+    <style>
+        /* 重置样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background-color: #F5F5F5;
+            color: #303030;
+            font-size: 14px;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+        
+        /* 主容器 */
+        .app-container {
+            max-width: 375px;
+            margin: 0 auto;
+            background-color: #FFFFFF;
+            height: 100vh;
+            overflow-y: auto;
+            position: relative;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* 顶部状态栏 */
+        .status-bar {
+            height: 20px;
+            background-color: #FFCB45;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            align-items: center;
+            color: #303030;
+            font-size: 12px;
+        }
+        
+        /* 顶部导航栏 */
+        .top-nav {
+            height: 44px;
+            background: linear-gradient(135deg, #FFCB45, #FF9F5B);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            color: #303030;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .location {
+            display: flex;
+            align-items: center;
+        }
+        
+        .location-icon {
+            margin-right: 5px;
+        }
+        
+        .weather {
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .weather-icon {
+            margin-right: 5px;
+        }
+        
+        /* 搜索框 */
+        .search-bar {
+            background: #FFFFFF;
+            height: 36px;
+            border-radius: 18px;
+            margin: 10px 15px;
+            display: flex;
+            align-items: center;
+            padding: 0 15px;
+            box-shadow: 0 2px 8px rgba(255, 175, 75, 0.1);
+        }
+        
+        .search-icon {
+            color: #FFCB45;
+            margin-right: 10px;
+        }
+        
+        .search-input {
+            border: none;
+            flex: 1;
+            height: 100%;
+            background: transparent;
+            color: #525252;
+            font-size: 14px;
+        }
+        
+        /* 轮播图 */
+        .banner {
+            height: 150px;
+            margin: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+            background: #EFEFEF;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .banner-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .banner-dots {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+        }
+        
+        .dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+        }
+        
+        .dot.active {
+            background-color: #FFFFFF;
+            width: 12px;
+            border-radius: 3px;
+        }
+        
+        /* 服务分类 */
+        .service-categories {
+            margin: 15px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .category-title {
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #303030;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .category-more {
+            font-size: 12px;
+            color: #8ED1B2;
+            font-weight: normal;
+        }
+        
+        .service-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+        
+        .service-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .service-icon {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            background: #FFF8E1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            color: #FF9F5B;
+            font-size: 22px;
+            box-shadow: 0 2px 4px rgba(255, 175, 75, 0.2);
+        }
+        
+        .service-name {
+            font-size: 12px;
+            color: #525252;
+        }
+        
+        /* 社区活动 */
+        .community-events {
+            margin: 15px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .events-scroll {
+            overflow-x: auto;
+            display: flex;
+            gap: 15px;
+            padding-bottom: 5px;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .events-scroll::-webkit-scrollbar {
+            display: none; /* Chrome, Safari */
+        }
+        
+        .event-card {
+            flex: 0 0 250px;
+            height: 120px;
+            border-radius: 10px;
+            background: #F9F9F9;
+            padding: 12px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+        
+        .event-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #303030;
+        }
+        
+        .event-time {
+            font-size: 12px;
+            color: #8ED1B2;
+            margin: 5px 0;
+        }
+        
+        .event-participants {
+            display: flex;
+            align-items: center;
+        }
+        
+        .avatar-group {
+            display: flex;
+        }
+        
+        .avatar {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #CCCCCC;
+            margin-right: -5px;
+            border: 1px solid #FFFFFF;
+        }
+        
+        .participants-count {
+            font-size: 12px;
+            color: #525252;
+            margin-left: 10px;
+        }
+        
+        /* 最新任务 */
+        .latest-tasks {
+            margin: 15px;
+            background: #FFFFFF;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .task-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #F5F5F5;
+        }
+        
+        .task-left {
+            display: flex;
+        }
+        
+        .task-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background: #FFF8E1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: #FF9F5B;
+            font-size: 18px;
+        }
+        
+        .task-info {
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+        
+        .task-title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #303030;
+        }
+        
+        .task-address {
+            font-size: 12px;
+            color: #7BB9E8;
+        }
+        
+        .task-right {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            justify-content: space-between;
+        }
+        
+        .task-reward {
+            font-size: 16px;
+            font-weight: bold;
+            color: #FF9F5B;
+        }
+        
+        .task-time {
+            font-size: 12px;
+            color: #999999;
+        }
+        
+        /* 底部导航 */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: #FFFFFF;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            border-top: 1px solid #F2F2F2;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            max-width: 375px;
+            margin: 0 auto;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #999999;
+        }
+        
+        .nav-item.active {
+            color: #FFCB45;
+        }
+        
+        .nav-icon {
+            font-size: 18px;
+            margin-bottom: 2px;
+        }
+        
+        .nav-text {
+            font-size: 10px;
+        }
+        
+        /* 发布按钮 */
+        .publish-button {
+            position: absolute;
+            bottom: 70px;
+            right: 15px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #FFCB45, #FF9F5B);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #FFFFFF;
+            font-size: 24px;
+            box-shadow: 0 4px 10px rgba(255, 175, 75, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- 状态栏 -->
+        <div class="status-bar">
+            <span>12:30</span>
+            <div>
+                <span>📶</span>
+                <span>📶</span>
+                <span>🔋</span>
+            </div>
+        </div>
+        
+        <!-- 顶部导航 -->
+        <div class="top-nav">
+            <div class="location">
+                <span class="location-icon">📍</span>
+                <span>阳光花园小区</span>
+            </div>
+            <div class="weather">
+                <span class="weather-icon">🌤️</span>
+                <span>26°C</span>
+            </div>
+        </div>
+        
+        <!-- 搜索框 -->
+        <div class="search-bar">
+            <span class="search-icon">🔍</span>
+            <input type="text" class="search-input" placeholder="搜索服务、商品">
+        </div>
+        
+        <!-- 轮播图 -->
+        <div class="banner">
+            <img src="https://img.freepik.com/free-photo/residential-buildings-with-green-courtyard_23-2149515143.jpg?w=826&t=st=1695801547~exp=1695802147~hmac=fd5c0d075c3b7e9c7ed1d3c6c73f377d7d4b48ad8a3ee8f14dac84c85c2b1b4b" class="banner-image" alt="社区照片">
+            <div class="banner-dots">
+                <div class="dot active"></div>
+                <div class="dot"></div>
+                <div class="dot"></div>
+            </div>
+        </div>
+        
+        <!-- 服务分类 -->
+        <div class="service-categories">
+            <div class="category-title">
+                <span>社区互助</span>
+                <span class="category-more">查看更多 ></span>
+            </div>
+            <div class="service-grid">
+                <div class="service-item">
+                    <div class="service-icon">🐾</div>
+                    <div class="service-name">宠物服务</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🍲</div>
+                    <div class="service-name">上门服务</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🏃</div>
+                    <div class="service-name">跑腿服务</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🧩</div>
+                    <div class="service-name">闲置交易</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🤝</div>
+                    <div class="service-name">找搭子</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">👨‍🔧</div>
+                    <div class="service-name">专业团队</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🛒</div>
+                    <div class="service-name">社区团购</div>
+                </div>
+                <div class="service-item">
+                    <div class="service-icon">🏬</div>
+                    <div class="service-name">商家广告</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 社区活动 -->
+        <div class="community-events">
+            <div class="category-title">
+                <span>社区活动</span>
+                <span class="category-more">更多 ></span>
+            </div>
+            <div class="events-scroll">
+                <div class="event-card">
+                    <div class="event-title">周末社区瑜伽课</div>
+                    <div class="event-time">周六上午 9:00-10:30</div>
+                    <div class="event-participants">
+                        <div class="avatar-group">
+                            <div class="avatar"></div>
+                            <div class="avatar"></div>
+                            <div class="avatar"></div>
+                        </div>
+                        <div class="participants-count">12人已报名</div>
+                    </div>
+                </div>
+                <div class="event-card">
+                    <div class="event-title">小区夏日露营</div>
+                    <div class="event-time">下周六 15:00-次日</div>
+                    <div class="event-participants">
+                        <div class="avatar-group">
+                            <div class="avatar"></div>
+                            <div class="avatar"></div>
+                            <div class="avatar"></div>
+                        </div>
+                        <div class="participants-count">8人已报名</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 最新任务 -->
+        <div class="latest-tasks">
+            <div class="category-title">
+                <span>最新任务</span>
+                <span class="category-more">全部 ></span>
+            </div>
+            <div class="task-list">
+                <div class="task-item">
+                    <div class="task-left">
+                        <div class="task-icon">🐕</div>
+                        <div class="task-info">
+                            <div class="task-title">下午遛狗服务</div>
+                            <div class="task-address">3栋2单元 | 500m</div>
+                        </div>
+                    </div>
+                    <div class="task-right">
+                        <div class="task-reward">¥30</div>
+                        <div class="task-time">15分钟前</div>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <div class="task-left">
+                        <div class="task-icon">📦</div>
+                        <div class="task-info">
+                            <div class="task-title">帮取快递5件</div>
+                            <div class="task-address">8栋1单元 | 300m</div>
+                        </div>
+                    </div>
+                    <div class="task-right">
+                        <div class="task-reward">¥20</div>
+                        <div class="task-time">30分钟前</div>
+                    </div>
+                </div>
+                <div class="task-item">
+                    <div class="task-left">
+                        <div class="task-icon">🧹</div>
+                        <div class="task-info">
+                            <div class="task-title">2居室开荒保洁</div>
+                            <div class="task-address">6栋3单元 | 800m</div>
+                        </div>
+                    </div>
+                    <div class="task-right">
+                        <div class="task-reward">¥150</div>
+                        <div class="task-time">1小时前</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 底部导航 -->
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">🏠</div>
+                <div class="nav-text">首页</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📋</div>
+                <div class="nav-text">订单</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">💬</div>
+                <div class="nav-text">消息</div>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">👤</div>
+                <div class="nav-text">我的</div>
+            </div>
+        </div>
+        
+        <!-- 发布按钮 -->
+        <div class="publish-button">+</div>
+    </div>
+</body>
+</html> 
